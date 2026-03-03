@@ -1,0 +1,280 @@
+.job-details-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+
+  p {
+    color: #666;
+    font-size: 16px;
+  }
+}
+
+.job-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.job-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+
+  .back-button {
+    flex-shrink: 0;
+    margin-top: 8px;
+  }
+
+  .header-content {
+    flex: 1;
+
+    .job-title {
+      font-size: 28px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      color: #333;
+      line-height: 1.2;
+    }
+
+    .company-name {
+      font-size: 18px;
+      color: #666;
+      margin: 0 0 16px 0;
+      font-weight: 500;
+    }
+
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+
+      .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #666;
+        font-size: 14px;
+
+        .meta-icon {
+          font-size: 18px;
+          color: #666;
+        }
+      }
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+
+    button {
+      min-width: 140px;
+    }
+  }
+}
+
+.job-description-card,
+.requirements-card,
+.skills-card,
+.benefits-card,
+.company-card {
+  mat-card-content {
+    padding: 20px 24px;
+  }
+
+  .job-description,
+  .requirements,
+  .benefits {
+    line-height: 1.6;
+    color: #333;
+
+    ::ng-deep p {
+      margin-bottom: 16px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ::ng-deep ul,
+    ::ng-deep ol {
+      margin-bottom: 16px;
+      padding-left: 20px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    ::ng-deep li {
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .skills-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    .skill-tag {
+      display: inline-block;
+      padding: 6px 12px;
+      background: #e3f2fd;
+      color: #1976d2;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+
+  .company-description {
+    color: #666;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  gap: 16px;
+
+  .error-icon {
+    font-size: 64px;
+    color: #f44336;
+  }
+
+  h2 {
+    margin: 0;
+    color: #333;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+    max-width: 400px;
+  }
+}
+
+.resume-upload-section {
+  margin-top: 20px;
+  
+  mat-card {
+    border: 2px dashed #1976d2;
+    background: #f8f9fa;
+    
+    mat-card-title {
+      color: #1976d2;
+      font-weight: 600;
+    }
+  }
+  
+  .upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    padding: 20px;
+    
+    button {
+      min-width: 200px;
+    }
+    
+    .file-info {
+      font-weight: 500;
+      color: #4caf50;
+      text-align: center;
+    }
+    
+    .upload-hint {
+      color: #666;
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+  
+  .apply-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    padding: 16px;
+    border-top: 1px solid #e0e0e0;
+    
+    button {
+      min-width: 140px;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .job-details-container {
+    padding: 16px;
+  }
+
+  .job-header {
+    flex-direction: column;
+    gap: 16px;
+
+    .header-content {
+      .job-title {
+        font-size: 24px;
+      }
+
+      .company-name {
+        font-size: 16px;
+      }
+
+      .job-meta {
+        gap: 12px;
+
+        .meta-item {
+          font-size: 13px;
+        }
+      }
+    }
+
+    .header-actions {
+      flex-direction: row;
+      width: 100%;
+
+      button {
+        flex: 1;
+        min-width: auto;
+      }
+    }
+  }
+
+  .job-description-card,
+  .requirements-card,
+  .skills-card,
+  .benefits-card,
+  .company-card {
+    mat-card-content {
+      padding: 16px;
+    }
+  }
+}

@@ -1,0 +1,160 @@
+<div class="job-details-container">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading job details...</p>
+  </div>
+
+  <!-- Job Details -->
+  <div class="job-content" *ngIf="!isLoading && job">
+    <!-- Header -->
+    <div class="job-header">
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      
+      <div class="header-content">
+        <h1 class="job-title">{{ job.title }}</h1>
+        <div class="company-info">
+          <p class="company-name">{{ job.company }}</p>
+        </div>
+        
+        <div class="job-meta">
+          <div class="meta-item">
+            <mat-icon class="meta-icon">location_on</mat-icon>
+            <span>{{ job.location }}</span>
+          </div>
+          
+          <div class="meta-item">
+            <mat-icon class="meta-icon">work</mat-icon>
+            <span>{{ getJobTypeLabel(job.jobType) }}</span>
+          </div>
+          
+          <div class="meta-item">
+            <mat-icon class="meta-icon">home_work</mat-icon>
+            <span>{{ getWorkLocationLabel(job.workLocation) }}</span>
+          </div>
+          
+          <div class="meta-item" *ngIf="job.salaryMin || job.salaryMax">
+            <mat-icon class="meta-icon">attach_money</mat-icon>
+            <span>{{ formatSalary(job.salaryMin, job.salaryMax) }}</span>
+          </div>
+          
+          <div class="meta-item">
+            <mat-icon class="meta-icon">schedule</mat-icon>
+            <span>Posted {{ getPostedDate(job.createdAt) }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button mat-stroked-button (click)="saveJob()" [disabled]="!currentUser">
+          <mat-icon>{{ isSaved ? 'bookmark' : 'bookmark_border' }}</mat-icon>
+          {{ isSaved ? 'Saved' : 'Save Job' }}
+        </button>
+        
+        <button mat-raised-button 
+                color="primary" 
+                (click)="applyForJob()" 
+                [disabled]="isApplying || !currentUser || hasAlreadyApplied">
+          <mat-icon>{{ isApplying ? 'hourglass_empty' : 'send' }}</mat-icon>
+          {{ isApplying ? 'Applying...' : 'Apply Now' }}
+        </button>
+        
+        <button mat-stroked-button 
+                (click)="showResumeUpload = !showResumeUpload"
+                [disabled]="!currentUser || hasAlreadyApplied">
+          <mat-icon>upload_file</mat-icon>
+          Apply with Resume
+        </button>
+      </div>
+      
+      <!-- Resume Upload Section -->
+      <div class="resume-upload-section" *ngIf="showResumeUpload && !hasAlreadyApplied">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Apply with Resume</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="upload-section">
+              <input type="file" #resumeInput (change)="onResumeSelected($event)" 
+                     accept=".pdf,.doc,.docx" style="display: none;">
+              <button mat-stroked-button type="button" (click)="resumeInput.click()" [disabled]="isApplying">
+                <mat-icon>upload_file</mat-icon>
+                {{ resumeFile ? 'Change Resume' : 'Select Resume' }}
+              </button>
+              <span class="file-info" *ngIf="resumeFile">
+                {{ resumeFile.name }}
+              </span>
+              <small class="upload-hint">PDF or Word document, max 5MB</small>
+            </div>
+            
+            <div class="apply-actions" *ngIf="resumeFile">
+              <button mat-raised-button 
+                      color="primary" 
+                      (click)="applyWithResume()" 
+                      [disabled]="isApplying">
+                <mat-icon>{{ isApplying ? 'hourglass_empty' : 'send' }}</mat-icon>
+                {{ isApplying ? 'Applying...' : 'Submit Application' }}
+              </button>
+              <button mat-stroked-button (click)="showResumeUpload = false">Cancel</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Job Description -->
+    <mat-card class="job-description-card">
+      <mat-card-header>
+        <mat-card-title>Job Description</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="job-description" [innerHTML]="job.description"></div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Requirements -->
+    <mat-card class="requirements-card" *ngIf="job.requirements">
+      <mat-card-header>
+        <mat-card-title>Requirements</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="requirements" [innerHTML]="job.requirements"></div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Skills Required -->
+    <mat-card class="skills-card" *ngIf="job.skillsRequired">
+      <mat-card-header>
+        <mat-card-title>Skills Required</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="skills-tags">
+          <span class="skill-tag" *ngFor="let skill of getSkillsArray(job.skillsRequired)">
+            {{ skill.trim() }}
+          </span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Benefits -->
+    <mat-card class="benefits-card" *ngIf="job.benefits">
+      <mat-card-header>
+        <mat-card-title>Benefits</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="benefits" [innerHTML]="job.benefits"></div>
+      </mat-card-content>
+    </mat-card>
+
+      </div>
+
+  <!-- Error State -->
+  <div class="error-container" *ngIf="!isLoading && !job">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h2>Job Not Found</h2>
+    <p>The job you're looking for doesn't exist or has been removed.</p>
+    <button mat-raised-button color="primary" (click)="goBack()">Back to Jobs</button>
+  </div>
+</div>

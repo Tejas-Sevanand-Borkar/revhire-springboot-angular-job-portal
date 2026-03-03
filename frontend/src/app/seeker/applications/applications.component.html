@@ -1,0 +1,94 @@
+<div class="applications-container">
+  <!-- Header -->
+  <div class="applications-header">
+    <div class="header-content">
+      <h1>My Applications</h1>
+      <p>Track the status of your job applications</p>
+    </div>
+    <button mat-icon-button (click)="loadApplications()" [disabled]="isLoading" class="refresh-button">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading your applications...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="!isLoading && applications.length === 0">
+    <mat-icon class="empty-icon">work_outline</mat-icon>
+    <h2>No Applications Yet</h2>
+    <p>You haven't applied to any jobs yet. Start exploring opportunities!</p>
+    <button mat-raised-button color="primary" (click)="navigateToJobs()">
+      Find Jobs
+    </button>
+  </div>
+
+  <!-- Applications List -->
+  <div class="applications-content" *ngIf="!isLoading && applications.length > 0">
+    <div class="applications-stats">
+      <div class="stat-card">
+        <div class="stat-number">{{ totalApplications }}</div>
+        <div class="stat-label">Total Applications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ shortlistedCount }}</div>
+        <div class="stat-label">Shortlisted</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ rejectedCount }}</div>
+        <div class="stat-label">Rejected</div>
+      </div>
+    </div>
+
+    <div class="applications-list">
+      <mat-card class="application-card" *ngFor="let application of applications; trackBy: trackByApplicationId">
+        <mat-card-content>
+          <div class="application-header">
+            <div class="job-info">
+              <h3 class="job-title">{{ application.job?.title || 'Job Title Not Available' }}</h3>
+              <p class="company-name" *ngIf="application.job && application.job.company">{{ application.job.company }}</p>
+              <p class="application-date">Applied on {{ getAppliedDate(application.createdAt) }}</p>
+            </div>
+            <div class="application-status">
+              <mat-chip [color]="getStatusColor(application.status)" selected>
+                {{ getStatusText(application.status) }}
+              </mat-chip>
+            </div>
+          </div>
+
+          <div class="application-details">
+            <div class="detail-item">
+              <mat-icon class="detail-icon">email</mat-icon>
+              <span>{{ application.jobSeekerId }}</span>
+            </div>
+
+            <div class="detail-item" *ngIf="application.coverLetter">
+              <mat-icon class="detail-icon">description</mat-icon>
+              <span>Cover letter provided</span>
+            </div>
+
+            <div class="detail-item" *ngIf="application.resumePath">
+              <mat-icon class="detail-icon">attach_file</mat-icon>
+              <span>Resume attached</span>
+            </div>
+          </div>
+
+          <div class="application-actions" *ngIf="application.status !== 'WITHDRAWN' && application.status !== 'REJECTED'">
+            <button mat-stroked-button (click)="viewJobDetails(application.jobId!)">
+              <mat-icon>visibility</mat-icon>
+              View Job Details
+            </button>
+            
+            <button mat-stroked-button color="warn" (click)="withdrawApplication(application.id)">
+              <mat-icon>cancel</mat-icon>
+              Withdraw Application
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

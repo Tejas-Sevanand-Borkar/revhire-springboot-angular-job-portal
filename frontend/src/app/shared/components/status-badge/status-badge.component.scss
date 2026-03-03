@@ -1,0 +1,39 @@
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  display: inline-block;
+  white-space: nowrap;
+
+  &.status-applied {
+    background: #e3f2fd;
+    color: #1976d2;
+  }
+
+  &.status-shortlisted {
+    background: #fff3e0;
+    color: #f57c00;
+  }
+
+  &.status-interview_scheduled {
+    background: #f3e5f5;
+    color: #7b1fa2;
+  }
+
+  &.status-hired {
+    background: #e8f5e8;
+    color: #388e3c;
+  }
+
+  &.status-rejected {
+    background: #ffebee;
+    color: #d32f2f;
+  }
+
+  &.status-withdrawn {
+    background: #fafafa;
+    color: #757575;
+  }
+}

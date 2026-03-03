@@ -1,0 +1,6 @@
+<button mat-icon-button class="notification-bell" (click)="toggleNotifications()" matTooltip="Notifications">
+  <mat-icon>notifications</mat-icon>
+  <span class="notification-badge" *ngIf="unreadCount > 0">
+    {{ unreadCount > 99 ? '99+' : unreadCount }}
+  </span>
+</button>

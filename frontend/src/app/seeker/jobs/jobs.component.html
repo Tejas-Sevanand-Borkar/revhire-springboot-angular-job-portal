@@ -1,0 +1,160 @@
+<div class="jobs-container">
+  <!-- Search Header -->
+  <div class="search-header">
+    <h1>Find Your Dream Job</h1>
+    <p>Discover opportunities that match your skills and aspirations</p>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="search-section">
+    <mat-card class="search-card">
+      <mat-card-content>
+        <div class="search-bar">
+          <mat-form-field appearance="fill" class="search-field">
+            <mat-label>Search Jobs</mat-label>
+            <input matInput 
+                   [(ngModel)]="searchQuery" 
+                   (keyup.enter)="searchJobs()"
+                   placeholder="Job title, skills, or company">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+          
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="searchJobs()"
+                  [disabled]="isLoading">
+            <mat-icon>search</mat-icon>
+            Search
+          </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-section">
+          <div class="filter-row">
+            <mat-form-field appearance="fill">
+              <mat-label>Job Type</mat-label>
+              <mat-select [(ngModel)]="selectedFilters.jobType" (selectionChange)="applyFilters()">
+                <mat-option value="">All Types</mat-option>
+                <mat-option value="FULL_TIME">Full Time</mat-option>
+                <mat-option value="PART_TIME">Part Time</mat-option>
+                <mat-option value="CONTRACT">Contract</mat-option>
+                <mat-option value="INTERNSHIP">Internship</mat-option>
+                <mat-option value="FREELANCE">Freelance</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Work Location</mat-label>
+              <mat-select [(ngModel)]="selectedFilters.workLocation" (selectionChange)="applyFilters()">
+                <mat-option value="">All Locations</mat-option>
+                <mat-option value="ON_SITE">On Site</mat-option>
+                <mat-option value="REMOTE">Remote</mat-option>
+                <mat-option value="HYBRID">Hybrid</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Location</mat-label>
+              <input matInput 
+                     [(ngModel)]="selectedFilters.location" 
+                     (keyup.enter)="applyFilters()"
+                     placeholder="City or State">
+            </mat-form-field>
+          </div>
+
+          <div class="filter-actions">
+            <button mat-stroked-button (click)="clearFilters()">
+              <mat-icon>clear</mat-icon>
+              Clear Filters
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading jobs...</p>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" *ngIf="!isLoading">
+    <div class="results-header">
+      <h2>{{ filteredJobs.length }} Jobs Found</h2>
+      <p *ngIf="filteredJobs.length === 0">No jobs found matching your criteria. Try adjusting your filters.</p>
+    </div>
+
+    <!-- Job Cards -->
+    <div class="jobs-grid" *ngIf="filteredJobs.length > 0">
+      <mat-card class="job-card" *ngFor="let job of filteredJobs">
+        <mat-card-content>
+          <!-- Job Header -->
+          <div class="job-header">
+            <div class="job-title-section">
+              <h3 class="job-title">{{ job.title }}</h3>
+              <p class="company-name">{{ job.company }}</p>
+            </div>
+            <div class="job-actions">
+              <button mat-icon-button (click)="saveJob(job.id)" matTooltip="Save Job">
+                <mat-icon>bookmark_border</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Job Details -->
+          <div class="job-details">
+            <p class="job-description">{{ job.description | slice:0:150 }}{{ job.description.length > 150 ? '...' : '' }}</p>
+            
+            <div class="job-meta">
+              <div class="meta-item">
+                <mat-icon class="meta-icon">location_on</mat-icon>
+                <span>{{ job.location }}</span>
+              </div>
+              
+              <div class="meta-item">
+                <mat-icon class="meta-icon">work</mat-icon>
+                <span>{{ getJobTypeLabel(job.jobType) }}</span>
+              </div>
+              
+              <div class="meta-item">
+                <mat-icon class="meta-icon">home_work</mat-icon>
+                <span>{{ getWorkLocationLabel(job.workLocation) }}</span>
+              </div>
+              
+              <div class="meta-item" *ngIf="job.salaryMin || job.salaryMax">
+                <mat-icon class="meta-icon">payments</mat-icon>
+                <span>{{ formatSalary(job.salaryMin, job.salaryMax) }}</span>
+              </div>
+            </div>
+
+            <!-- Skills and Experience -->
+            <div class="job-requirements" *ngIf="job.skillsRequired">
+              <div class="skills-tags">
+                <span class="skill-tag" *ngFor="let skill of getSkillsArray(job.skillsRequired) | slice:0:5">
+                  {{ skill.trim() }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Posted Date -->
+            <div class="job-footer">
+              <span class="posted-date">
+                <mat-icon class="meta-icon">schedule</mat-icon>
+                Posted {{ getPostedDate(job.createdAt) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <mat-card-actions align="end">
+            <button mat-raised-button color="primary" (click)="viewJobDetails(job.id)">
+              View Details & Apply
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

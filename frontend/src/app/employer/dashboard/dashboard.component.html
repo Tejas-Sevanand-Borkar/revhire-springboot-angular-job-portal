@@ -1,0 +1,207 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Employer Dashboard</h1>
+        <p class="subtitle">Manage your job postings and track applicant progress</p>
+      </div>
+      <button mat-icon-button (click)="refreshDashboard()" matTooltip="Refresh Dashboard">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="loading-spinner" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <!-- Stats Overview -->
+  <div class="stats-grid" *ngIf="!isLoading">
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon jobs">
+            <mat-icon>work</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ dashboardStats.totalJobs }}</h3>
+            <p>Total Jobs Posted</p>
+            <div class="stat-breakdown">
+              <span class="active">{{ dashboardStats.activeJobs }} active</span>
+              <span class="inactive">{{ dashboardStats.inactiveJobs }} inactive</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon applications">
+            <mat-icon>people</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ dashboardStats.totalApplications }}</h3>
+            <p>Total Applications</p>
+            <div class="stat-breakdown">
+              <span class="pending">{{ dashboardStats.pendingApplications }} pending</span>
+              <span class="under-review">{{ dashboardStats.underReviewApplications }} under review</span>
+              <span class="shortlisted">{{ dashboardStats.shortlistedApplications }} shortlisted</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon rate">
+            <mat-icon>trending_up</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ getApplicationRate() }}</h3>
+            <p>Avg Applications per Job</p>
+            <div class="stat-breakdown">
+              <span class="new">{{ dashboardStats.newApplicationsThisWeek }} this week</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon conversion">
+            <mat-icon>star</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ getConversionRate() }}%</h3>
+            <p>Progress Rate</p>
+            <div class="stat-breakdown">
+              <span class="rejected">{{ dashboardStats.rejectedApplications }} rejected</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="dashboard-content" *ngIf="!isLoading">
+    <!-- Popular Jobs -->
+    <div class="content-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Popular Jobs</mat-card-title>
+          <mat-card-subtitle>Your most viewed and applied jobs</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="jobs-list" *ngIf="dashboardStats.popularJobs.length > 0">
+            <div class="job-card" *ngFor="let job of dashboardStats.popularJobs">
+              <div class="job-header">
+                <div class="job-info">
+                  <h3>{{ job.title }}</h3>
+                  <mat-chip [color]="getJobStatusColor(job.status)">
+                    {{ job.status }}
+                  </mat-chip>
+                </div>
+                <div class="job-actions">
+                  <button mat-stroked-button (click)="navigateToJobDetails(job.id)">
+                    View Details
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="empty-state" *ngIf="dashboardStats.popularJobs.length === 0">
+            <mat-icon class="empty-icon">work_off</mat-icon>
+            <p>No jobs posted yet.</p>
+            <button mat-raised-button color="primary" (click)="navigateToPostJob()">
+              Post Your First Job
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="content-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Recent Activity</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-icon applications">
+                <mat-icon>description</mat-icon>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">{{ dashboardStats.newApplicationsThisWeek }} new applications this week</p>
+                <p class="activity-time">Review pending applications</p>
+              </div>
+              <button mat-stroked-button (click)="navigateToApplications()">
+                Review
+              </button>
+            </div>
+            
+            <div class="activity-item">
+              <div class="activity-icon jobs">
+                <mat-icon>work</mat-icon>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">{{ dashboardStats.activeJobs }} jobs currently active</p>
+                <p class="activity-time">Manage your job postings</p>
+              </div>
+              <button mat-stroked-button (click)="navigateToJobs()">
+                Manage
+              </button>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-icon pending">
+                <mat-icon>hourglass_empty</mat-icon>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">{{ dashboardStats.underReviewApplications }} applications under review</p>
+                <p class="activity-time">Take action on applications under review</p>
+              </div>
+              <button mat-stroked-button (click)="navigateToApplications()">
+                Review
+              </button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="content-section">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Quick Actions</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="quick-actions-grid">
+            <button mat-raised-button color="primary" (click)="navigateToPostJob()">
+              <mat-icon>add</mat-icon>
+              Post New Job
+            </button>
+            <button mat-raised-button (click)="navigateToApplications()">
+              <mat-icon>people</mat-icon>
+              Review Applications
+            </button>
+            <button mat-raised-button (click)="navigateToJobs()">
+              <mat-icon>work</mat-icon>
+              Manage Jobs
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

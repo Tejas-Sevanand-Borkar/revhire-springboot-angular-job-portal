@@ -1,0 +1,143 @@
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+  
+  h1 {
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  p {
+    color: #666;
+    margin: 0;
+  }
+}
+
+.profile-form {
+  .form-section {
+    margin-bottom: 24px;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    
+    .form-field {
+      flex: 1;
+      
+      &.salary-field {
+        label {
+          display: block;
+          margin-bottom: 8px;
+          color: #666;
+          font-size: 14px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .upload-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    
+    .file-info {
+      color: #666;
+      font-size: 14px;
+    }
+    
+    .upload-hint {
+      color: #999;
+      font-size: 12px;
+    }
+  }
+  
+  .experience-item,
+  .education-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    
+    .experience-header,
+    .education-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      
+      h3 {
+        margin: 0;
+        color: #333;
+      }
+    }
+  }
+  
+  .salary-range {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    input {
+      flex: 1;
+    }
+    
+    span {
+      color: #666;
+      font-weight: 500;
+    }
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e0e0e0;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 16px;
+  }
+  
+  .profile-form {
+    .form-row {
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .salary-range {
+      flex-direction: column;
+      align-items: stretch;
+      
+      span {
+        text-align: center;
+      }
+    }
+    
+    .form-actions {
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

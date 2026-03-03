@@ -1,0 +1,299 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.mat-mdc-raised-button {
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.mat-mdc-outlined-button {
+  border-radius: 8px;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.mat-mdc-standard-chip {
+  border-radius: 16px;
+}
+
+.mat-table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600;
+  color: #424242;
+}
+
+.mat-mdc-cell {
+  color: #616161;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #f44336;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.status-applied {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-shortlisted {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.status-interview_scheduled {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.status-hired {
+  background: #e8f5e8;
+  color: #388e3c;
+}
+
+.status-rejected {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.status-withdrawn {
+  background: #fafafa;
+  color: #757575;
+}
+
+/* Remove any overlays or backdrops that might cause black boxes */
+.cdk-overlay-container {
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+.cdk-overlay-backdrop {
+  background: transparent !important;
+}
+
+.mat-mdc-dialog-container {
+  background: white !important;
+}
+
+/* Remove any fixed positioned elements that might cause overlays */
+* {
+  &.cdk-overlay-pane {
+    background: white !important;
+  }
+}
+
+/* Ensure no black overlays at bottom */
+body, html {
+  background: white !important;
+  overflow-x: hidden !important;
+}
+
+/* Remove any potential bottom overlays */
+::after, ::before {
+  content: none !important;
+}
+
+/* Completely remove outline appearance and use fill appearance instead */
+.mat-mdc-form-field-appearance-outline {
+  .mat-mdc-text-field-wrapper {
+    border: none !important;
+    background: #f5f5f5 !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+  }
+  
+  .mat-mdc-form-field-flex {
+    border: none !important;
+    background: transparent !important;
+    border-radius: 4px !important;
+    box-shadow: none !important;
+  }
+  
+  .mat-mdc-form-field-infix {
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .mat-mdc-form-field-outline {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
+  
+  .mat-mdc-form-field-outline-start,
+  .mat-mdc-form-field-outline-end,
+  .mat-mdc-form-field-outline-gap {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    border: none !important;
+  }
+}
+
+/* Additional overrides for any remaining elements */
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    border-right: none !important;
+    border-left: none !important;
+    box-shadow: none !important;
+  }
+  
+  .mat-mdc-form-field-flex {
+    border-right: none !important;
+    border-left: none !important;
+    box-shadow: none !important;
+  }
+  
+  .mat-mdc-form-field-infix {
+    border-right: none !important;
+    border-left: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Hide all outline-related elements globally */
+.mat-mdc-form-field-outline,
+.mat-mdc-form-field-outline-start,
+.mat-mdc-form-field-outline-end,
+.mat-mdc-form-field-outline-gap {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Fix salary range input styling */
+.salary-range {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  
+  .mat-mdc-form-field {
+    flex: 1 !important;
+  }
+  
+  input {
+    width: 100% !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    padding: 8px !important;
+    font-size: 16px !important;
+    
+    &:focus {
+      outline: none !important;
+      border-color: #1976d2 !important;
+    }
+  }
+  
+  span {
+    color: #666 !important;
+    font-weight: 500 !important;
+  }
+}
+
+/* Fix Angular Material dropdown positioning for create-job */
+app-create-job .mat-mdc-select-panel {
+  position: absolute !important;
+  z-index: 10000 !important;
+  transform: none !important;
+}
+
+app-create-job .cdk-overlay-pane {
+  position: absolute !important;
+  z-index: 10001 !important;
+}
+
+app-create-job .cdk-overlay-container {
+  z-index: 9999 !important;
+}
+
+/* Fix Angular Material dropdown positioning for register component */
+app-register .mat-mdc-select-panel {
+  position: absolute !important;
+  z-index: 10000 !important;
+  transform: none !important;
+}
+
+app-register .cdk-overlay-pane {
+  position: absolute !important;
+  z-index: 10001 !important;
+}
+
+app-register .cdk-overlay-container {
+  z-index: 9999 !important;
+}
+
+/* Global fix for all mat-select dropdowns */
+.mat-mdc-select-panel {
+  position: absolute !important;
+  z-index: 1000 !important;
+  transform: none !important;
+  margin-top: 0 !important;
+}
+
+.cdk-overlay-pane {
+  position: absolute !important;
+  z-index: 1001 !important;
+}
+
+.cdk-overlay-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 999 !important;
+  pointer-events: none !important;
+}
+
+.cdk-overlay-connected-position-bounding-box {
+  position: absolute !important;
+  z-index: 1002 !important;
+}

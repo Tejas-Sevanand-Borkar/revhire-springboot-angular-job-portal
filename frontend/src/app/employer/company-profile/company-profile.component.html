@@ -1,0 +1,118 @@
+<div class="company-profile-container">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading company profile...</p>
+  </div>
+
+  <!-- Profile Content -->
+  <div class="profile-content" *ngIf="!isLoading && profile">
+    <!-- Header Section -->
+    <div class="profile-header">
+      <div class="header-content">
+        <div class="company-info">
+          <img 
+            [src]="getLogoUrl(profile.logoPath)" 
+            [alt]="profile.companyName"
+            class="company-logo"
+            (error)="onImageError($event)"
+          />
+          <div class="company-details">
+            <h1>{{ profile.companyName }}</h1>
+            <p class="industry" *ngIf="profile.industry">{{ profile.industry }}</p>
+            <p class="company-size" *ngIf="profile.companySize">
+              <mat-icon>business</mat-icon>
+              {{ formatCompanySize(profile.companySize) }}
+            </p>
+          </div>
+        </div>
+        <div class="header-actions" *ngIf="isOwnProfile">
+          <button mat-raised-button color="primary" (click)="editProfile()">
+            <mat-icon>edit</mat-icon>
+            Edit Profile
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="profile-main">
+      
+      <!-- Contact Information -->
+      <mat-card class="contact-card">
+        <mat-card-header>
+          <mat-card-title>Contact Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="contact-info">
+            <div class="contact-item" *ngIf="profile.email">
+              <mat-icon>email</mat-icon>
+              <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+            </div>
+            <div class="contact-item" *ngIf="profile.phoneNumber">
+              <mat-icon>phone</mat-icon>
+              <a href="tel:{{ profile.phoneNumber }}">{{ profile.phoneNumber }}</a>
+            </div>
+            <div class="contact-item" *ngIf="profile.website">
+              <mat-icon>language</mat-icon>
+              <a href="{{ getWebsiteUrl(profile.website) }}" target="_blank" rel="noopener">
+                {{ profile.website }}
+              </a>
+            </div>
+            <div class="contact-item" *ngIf="profile.address">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ profile.address }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Company Jobs -->
+      <mat-card class="jobs-card" *ngIf="companyJobs.length > 0">
+        <mat-card-header>
+          <mat-card-title>Open Positions ({{ companyJobs.length }})</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="jobs-list">
+            <div class="job-item" *ngFor="let job of companyJobs" (click)="viewJobDetails(job.id)">
+              <div class="job-info">
+                <h3 class="job-title">{{ job.title }}</h3>
+                <div class="job-meta">
+                  <span class="location">
+                    <mat-icon>location_on</mat-icon>
+                    {{ job.location }}
+                  </span>
+                  <span class="salary" *ngIf="job.salary">
+                    <mat-icon>payments</mat-icon>
+                    {{ job.salary }}
+                  </span>
+                  <span class="type">
+                    <mat-icon>work</mat-icon>
+                    {{ job.type }}
+                  </span>
+                </div>
+              </div>
+              <div class="job-stats">
+                <span class="applications">
+                  {{ job.applications }} applications
+                </span>
+                <mat-icon>arrow_forward</mat-icon>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- No Jobs Message -->
+      <mat-card class="no-jobs-card" *ngIf="companyJobs.length === 0">
+        <mat-card-content>
+          <div class="no-jobs-content">
+            <mat-icon class="no-jobs-icon">work_off</mat-icon>
+            <h3>No Open Positions</h3>
+            <p>This company doesn't have any open positions at the moment.</p>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

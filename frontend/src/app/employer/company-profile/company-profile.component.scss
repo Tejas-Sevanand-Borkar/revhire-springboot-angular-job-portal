@@ -1,0 +1,294 @@
+.company-profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+
+  p {
+    color: #666;
+    font-size: 16px;
+  }
+}
+
+.profile-content {
+  .profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+    color: white;
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .company-info {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+
+      .company-logo {
+        width: 120px;
+        height: 120px;
+        border-radius: 12px;
+        object-fit: cover;
+        background: white;
+        padding: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .company-details {
+        h1 {
+          font-size: 32px;
+          font-weight: 600;
+          margin: 0 0 8px 0;
+          color: white;
+        }
+
+        .industry {
+          font-size: 18px;
+          margin: 0 0 12px 0;
+          opacity: 0.9;
+        }
+
+        .company-size {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 16px;
+          margin: 0;
+          opacity: 0.8;
+
+          mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+    }
+
+    .header-actions {
+      button {
+        min-width: 140px;
+      }
+    }
+  }
+
+  .profile-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+
+    @media (min-width: 768px) {
+      grid-template-columns: 2fr 1fr;
+    }
+
+    .about-card {
+      grid-column: 1 / -1;
+
+      .no-description {
+        color: #666;
+        font-style: italic;
+      }
+    }
+
+    .contact-card {
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .contact-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          mat-icon {
+            color: #667eea;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+          }
+
+          a, span {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+
+            &:hover {
+              color: #667eea;
+            }
+          }
+        }
+      }
+    }
+
+    .jobs-card {
+      grid-column: 1 / -1;
+
+      .jobs-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .job-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+          }
+
+          .job-info {
+            flex: 1;
+
+            .job-title {
+              font-size: 18px;
+              font-weight: 600;
+              color: #333;
+              margin: 0 0 12px 0;
+            }
+
+            .job-meta {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 16px;
+
+              span {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: 14px;
+                color: #666;
+
+                mat-icon {
+                  font-size: 16px;
+                  width: 16px;
+                  height: 16px;
+                }
+              }
+            }
+          }
+
+          .job-stats {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-size: 14px;
+
+            .applications {
+              font-weight: 500;
+            }
+
+            mat-icon {
+              color: #667eea;
+            }
+          }
+        }
+      }
+    }
+
+    .no-jobs-card {
+      grid-column: 1 / -1;
+      text-align: center;
+
+      .no-jobs-content {
+        padding: 40px 20px;
+
+        .no-jobs-icon {
+          font-size: 48px;
+          width: 48px;
+          height: 48px;
+          color: #ccc;
+          margin-bottom: 16px;
+        }
+
+        h3 {
+          font-size: 20px;
+          color: #333;
+          margin: 0 0 8px 0;
+        }
+
+        p {
+          color: #666;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .company-profile-container {
+    padding: 16px;
+  }
+
+  .profile-header {
+    padding: 24px !important;
+
+    .company-info {
+      flex-direction: column;
+      text-align: center;
+
+      .company-logo {
+        width: 80px;
+        height: 80px;
+      }
+
+      .company-details {
+        h1 {
+          font-size: 24px !important;
+        }
+
+        .industry {
+          font-size: 16px !important;
+        }
+      }
+    }
+
+    .header-content {
+      flex-direction: column;
+      gap: 16px !important;
+    }
+  }
+
+  .profile-main {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .job-item {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px !important;
+
+    .job-stats {
+      align-self: stretch;
+      justify-content: space-between;
+    }
+  }
+}

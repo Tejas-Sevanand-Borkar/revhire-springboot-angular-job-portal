@@ -1,0 +1,107 @@
+<div class="saved-jobs-container">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Saved Jobs</h1>
+      <p class="subtitle">Manage your saved job opportunities</p>
+    </div>
+    <button mat-stroked-button (click)="navigateToJobs()">
+      <mat-icon>search</mat-icon>
+      Find More Jobs
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading saved jobs...</p>
+  </div>
+
+  <!-- Results -->
+  <div class="results-section" *ngIf="!isLoading">
+    <div class="results-header">
+      <h2>{{ savedJobs.length }} Saved Jobs</h2>
+      <p *ngIf="savedJobs.length === 0">You haven't saved any jobs yet. Start exploring and save jobs that interest you!</p>
+    </div>
+
+    <!-- Job Cards -->
+    <div class="jobs-grid" *ngIf="savedJobs.length > 0">
+      <mat-card class="job-card" *ngFor="let savedJob of savedJobs">
+        <mat-card-content>
+          <!-- Job Header -->
+          <div class="job-header">
+            <div class="job-title-section">
+              <h3 class="job-title">{{ savedJob.job.title }}</h3>
+              <p class="company-name">{{ savedJob.job.company }}</p>
+            </div>
+            <div class="job-actions">
+              <button mat-icon-button (click)="unsaveJob(savedJob.job.id)" matTooltip="Remove from saved jobs">
+                <mat-icon>bookmark</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Job Details -->
+          <div class="job-details">
+            <p class="job-description">{{ savedJob.job.description | slice:0:150 }}{{ savedJob.job.description.length > 150 ? '...' : '' }}</p>
+            
+            <div class="job-meta">
+              <div class="meta-item">
+                <mat-icon class="meta-icon">location_on</mat-icon>
+                <span>{{ savedJob.job.location }}</span>
+              </div>
+              
+              <div class="meta-item">
+                <mat-icon class="meta-icon">work</mat-icon>
+                <span>{{ getJobTypeLabel(savedJob.job.jobType) }}</span>
+              </div>
+              
+              <div class="meta-item">
+                <mat-icon class="meta-icon">home_work</mat-icon>
+                <span>{{ getWorkLocationLabel(savedJob.job.workLocation) }}</span>
+              </div>
+              
+              <div class="meta-item" *ngIf="savedJob.job.salaryMin || savedJob.job.salaryMax">
+                <mat-icon class="meta-icon">payments</mat-icon>
+                <span>{{ formatSalary(savedJob.job.salaryMin, savedJob.job.salaryMax) }}</span>
+              </div>
+            </div>
+
+            <!-- Posted Date -->
+            <div class="job-footer">
+              <span class="posted-date">
+                <mat-icon class="meta-icon">schedule</mat-icon>
+                Posted {{ getPostedDate(savedJob.job.createdAt) }}
+              </span>
+              <span class="saved-date">
+                <mat-icon class="meta-icon">bookmark</mat-icon>
+                {{ getSavedDate(savedJob.createdAt) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <mat-card-actions align="end">
+            <button mat-stroked-button (click)="viewJobDetails(savedJob.job.id)">
+              View Details
+            </button>
+            <button mat-raised-button color="primary" (click)="applyForJob(savedJob.job.id)">
+              Apply Now
+            </button>
+          </mat-card-actions>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="savedJobs.length === 0">
+      <mat-icon class="empty-icon">bookmark_border</mat-icon>
+      <h3>No Saved Jobs</h3>
+      <p>Start exploring job opportunities and save the ones that interest you!</p>
+      <button mat-raised-button color="primary" (click)="navigateToJobs()">
+        <mat-icon>search</mat-icon>
+        Find Jobs
+      </button>
+    </div>
+  </div>
+</div>

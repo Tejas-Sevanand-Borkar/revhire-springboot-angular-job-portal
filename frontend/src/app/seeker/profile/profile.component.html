@@ -1,0 +1,325 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>{{ existingProfile ? 'Edit Profile' : 'Create Profile' }}</h1>
+    <p>Build your professional profile to attract employers</p>
+  </div>
+
+  <form [formGroup]="profileForm" class="profile-form">
+    <!-- Personal Information -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Personal Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" required>
+            <mat-error>{{ getErrorMessage('firstName') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" required>
+            <mat-error>{{ getErrorMessage('lastName') }}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" required>
+            <mat-error>{{ getErrorMessage('email') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Location</mat-label>
+            <input matInput formControlName="location" placeholder="City, Country">
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Professional Headline</mat-label>
+            <input matInput formControlName="headline" placeholder="e.g., Senior Software Engineer">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Professional Summary</mat-label>
+          <textarea matInput formControlName="summary" rows="4" placeholder="Brief description of your professional background and career goals..."></textarea>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Profile Picture -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Profile Picture</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="upload-section">
+          <input type="file" #profilePictureInput (change)="onProfilePictureSelected($event)" accept="image/jpeg,image/jpg,image/png" style="display: none;">
+          <button mat-stroked-button type="button" (click)="profilePictureInput.click()" [disabled]="isUploading">
+            <mat-icon>camera_alt</mat-icon>
+            {{ profilePictureFile ? 'Change Picture' : 'Upload Picture' }}
+          </button>
+          <span class="file-info" *ngIf="profilePictureFile">
+            {{ profilePictureFile.name }}
+          </span>
+          <small class="upload-hint">JPEG or PNG, max 2MB</small>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Resume Upload -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Resume</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="upload-section">
+          <input type="file" #resumeInput (change)="onResumeSelected($event)" accept=".pdf,.doc,.docx" style="display: none;">
+          <button mat-stroked-button type="button" (click)="resumeInput.click()" [disabled]="isUploading">
+            <mat-icon>upload_file</mat-icon>
+            {{ resumeFile ? 'Change Resume' : 'Upload Resume' }}
+          </button>
+          <span class="file-info" *ngIf="resumeFile">
+            {{ resumeFile.name }}
+          </span>
+          <small class="upload-hint">PDF or Word document, max 5MB</small>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Experience -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Work Experience</mat-card-title>
+        <mat-card-subtitle>Add your professional experience</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div formArrayName="experience">
+          <div *ngFor="let expGroup of experienceArray.controls; let i = index" [formGroupName]="i" class="experience-item">
+            <div class="experience-header">
+              <h3>Experience {{ i + 1 }}</h3>
+              <button mat-icon-button type="button" (click)="removeExperience(i)" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            
+            <div class="form-row">
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>Company</mat-label>
+                <input matInput formControlName="company" required>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>Position</mat-label>
+                <input matInput formControlName="position" required>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>Start Date</mat-label>
+                <input matInput formControlName="startDate" type="month" required>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>End Date</mat-label>
+                <input matInput formControlName="endDate" type="month" [disabled]="expGroup.get('currentJob')?.value">
+              </mat-form-field>
+            </div>
+
+            <mat-checkbox formControlName="currentJob" (change)="expGroup.get('endDate')?.setValue('')">
+              I currently work here
+            </mat-checkbox>
+
+            <mat-form-field appearance="fill" class="full-width">
+              <mat-label>Description</mat-label>
+              <textarea matInput formControlName="description" rows="3" placeholder="Describe your responsibilities and achievements..."></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <button mat-stroked-button type="button" (click)="addExperience()">
+          <mat-icon>add</mat-icon>
+          Add Experience
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Education -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Education</mat-card-title>
+        <mat-card-subtitle>Add your educational background</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div formArrayName="education">
+          <div *ngFor="let eduGroup of educationArray.controls; let i = index" [formGroupName]="i" class="education-item">
+            <div class="education-header">
+              <h3>Education {{ i + 1 }}</h3>
+              <button mat-icon-button type="button" (click)="removeEducation(i)" color="warn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+            
+            <div class="form-row">
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>Institution</mat-label>
+                <input matInput formControlName="institution" required>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>Degree</mat-label>
+                <input matInput formControlName="degree" required>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>Field of Study</mat-label>
+                <input matInput formControlName="field" required>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>GPA</mat-label>
+                <input matInput formControlName="gpa" placeholder="e.g., 3.8">
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>Start Date</mat-label>
+                <input matInput formControlName="startDate" type="month" required>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="form-field">
+                <mat-label>End Date</mat-label>
+                <input matInput formControlName="endDate" type="month" [disabled]="eduGroup.get('currentEducation')?.value">
+              </mat-form-field>
+            </div>
+
+            <mat-checkbox formControlName="currentEducation" (change)="eduGroup.get('endDate')?.setValue('')">
+              I currently study here
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <button mat-stroked-button type="button" (click)="addEducation()">
+          <mat-icon>add</mat-icon>
+          Add Education
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Skills -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Skills</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Skills</mat-label>
+          <mat-chip-grid #chipGrid>
+            <mat-chip-row
+              *ngFor="let skill of profileForm.get('skills')?.value"
+              (removed)="removeSkill(skill)">
+              {{ skill }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip-row>
+          </mat-chip-grid>
+          <input matInput 
+                 #skillInput
+                 [matChipInputFor]="chipGrid"
+                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 (matChipInputTokenEnd)="addSkill($event)">
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Job Preferences -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Job Preferences</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-row">
+          <div class="form-field salary-field">
+            <label>Expected Salary Range</label>
+            <div class="salary-range">
+              <input matInput type="number" formControlName="expectedSalaryMin" placeholder="Min">
+              <span>-</span>
+              <input matInput type="number" formControlName="expectedSalaryMax" placeholder="Max">
+            </div>
+          </div>
+
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Work Preference</mat-label>
+            <mat-select formControlName="workPreference">
+              <mat-option value="">No preference</mat-option>
+              <mat-option value="ON_SITE">On Site</mat-option>
+              <mat-option value="REMOTE">Remote</mat-option>
+              <mat-option value="HYBRID">Hybrid</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>Availability</mat-label>
+            <mat-select formControlName="availability">
+              <mat-option value="">Select availability</mat-option>
+              <mat-option value="IMMEDIATE">Immediately</mat-option>
+              <mat-option value="TWO_WEEKS">2 weeks</mat-option>
+              <mat-option value="ONE_MONTH">1 month</mat-option>
+              <mat-option value="TWO_MONTHS">2 months</mat-option>
+              <mat-option value="FLEXIBLE">Flexible</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Social Links -->
+    <mat-card class="form-section">
+      <mat-card-header>
+        <mat-card-title>Social Links</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>LinkedIn URL</mat-label>
+          <input matInput formControlName="linkedinUrl" placeholder="https://linkedin.com/in/yourprofile">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>GitHub URL</mat-label>
+          <input matInput formControlName="githubUrl" placeholder="https://github.com/yourusername">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Portfolio URL</mat-label>
+          <input matInput formControlName="portfolioUrl" placeholder="https://yourportfolio.com">
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button mat-stroked-button type="button" (click)="cancel()" [disabled]="isSaving">
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="button" (click)="saveProfile()" [disabled]="isSaving || profileForm.invalid">
+        <mat-icon>save</mat-icon>
+        {{ isSaving ? 'Saving...' : (existingProfile ? 'Update Profile' : 'Create Profile') }}
+      </button>
+    </div>
+  </form>
+</div>

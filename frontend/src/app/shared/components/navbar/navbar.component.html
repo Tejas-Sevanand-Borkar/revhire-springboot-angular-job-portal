@@ -1,0 +1,116 @@
+<mat-toolbar class="navbar" color="primary">
+  <mat-toolbar-row>
+    <!-- Logo and Brand -->
+    <button mat-icon-button class="menu-button" (click)="toggleMenu()" *ngIf="isMobileView()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    
+    <a class="brand-logo" routerLink="/" (click)="navigateToDashboard()">
+      <mat-icon class="brand-icon">work</mat-icon>
+      <span class="brand-text">RevHire</span>
+    </a>
+
+    <span class="spacer"></span>
+
+    <!-- Navigation Links (Desktop) -->
+    <div class="nav-links" *ngIf="currentUser && !isMobileView()">
+      <!-- Seeker Navigation -->
+      <ng-container *ngIf="isSeeker">
+        <a mat-button routerLink="/seeker/jobs" routerLinkActive="active">Find Jobs</a>
+        <a mat-button routerLink="/seeker/saved-jobs" routerLinkActive="active">Saved Jobs</a>
+        <a mat-button routerLink="/seeker/applications" routerLinkActive="active">My Applications</a>
+        <a mat-button routerLink="/seeker/profile" routerLinkActive="active">Profile</a>
+      </ng-container>
+
+      <!-- Employer Navigation -->
+      <ng-container *ngIf="isEmployer">
+        <a mat-button routerLink="/employer/dashboard" routerLinkActive="active">Dashboard</a>
+        <a mat-button routerLink="/employer/jobs" routerLinkActive="active">My Jobs</a>
+        <a mat-button routerLink="/employer/applications" routerLinkActive="active">Applications</a>
+      </ng-container>
+    </div>
+
+    <!-- User Menu -->
+    <div class="user-menu" *ngIf="currentUser">
+      <!-- Notification Bell -->
+      <app-notification-bell></app-notification-bell>
+
+      <!-- User Dropdown -->
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <button mat-menu-item disabled>
+          <mat-icon class="menu-icon">person</mat-icon>
+          <span>{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon class="menu-icon">email</mat-icon>
+          <span>{{ currentUser.email }}</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item disabled>
+          <mat-icon class="menu-icon">work</mat-icon>
+          <span>{{ currentUser.role }}</span>
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="navigateToDashboard()">
+          <mat-icon class="menu-icon">dashboard</mat-icon>
+          <span>Dashboard</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon class="menu-icon">logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+
+    <!-- Auth Links (when not logged in) -->
+    <div class="auth-links" *ngIf="!currentUser">
+      <a mat-button routerLink="/auth/login">Login</a>
+      <a mat-raised-button routerLink="/auth/register">Register</a>
+    </div>
+  </mat-toolbar-row>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" *ngIf="isMenuOpen && isMobileView()">
+    <mat-nav-list>
+      <!-- Seeker Mobile Navigation -->
+      <ng-container *ngIf="isSeeker">
+        <a mat-list-item routerLink="/seeker/jobs" (click)="toggleMenu()">
+          <mat-icon matListItemIcon>search</mat-icon>
+          <span matListItemTitle>Find Jobs</span>
+        </a>
+        <a mat-list-item routerLink="/seeker/saved-jobs" (click)="toggleMenu()">
+          <mat-icon matListItemIcon>bookmark</mat-icon>
+          <span matListItemTitle>Saved Jobs</span>
+        </a>
+        <a mat-list-item routerLink="/seeker/applications" (click)="toggleMenu()">
+          <mat-icon matListItemIcon>description</mat-icon>
+          <span matListItemTitle>My Applications</span>
+        </a>
+        <a mat-list-item routerLink="/seeker/profile" (click)="toggleMenu()">
+          <mat-icon matListItemIcon>person</mat-icon>
+          <span matListItemTitle>Profile</span>
+        </a>
+      </ng-container>
+
+      <!-- Employer Mobile Navigation -->
+      <ng-container *ngIf="isEmployer">
+        <a mat-list-item routerLink="/employer/dashboard" (click)="toggleMenu()">
+          <mat-icon matListItemIcon>dashboard</mat-icon>
+          <span matListItemTitle>Dashboard</span>
+        </a>
+        <a mat-list-item routerLink="/employer/jobs" (click)="toggleMenu()">
+          <mat-icon matListItemIcon>work</mat-icon>
+          <span matListItemTitle>My Jobs</span>
+        </a>
+        <a mat-list-item routerLink="/employer/applications" (click)="toggleMenu()">
+          <mat-icon matListItemIcon>people</mat-icon>
+          <span matListItemTitle>Applications</span>
+        </a>
+      </ng-container>
+    </mat-nav-list>
+  </div>
+</mat-toolbar>
